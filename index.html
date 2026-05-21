@@ -188,6 +188,41 @@
             color: white;
             min-width: 600px;
         }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+
+            margin: 15px 0 30px 0;
+        }
+
+        .pagination button {
+            background: var(--btn-gray);
+            border: none;
+            color: white;
+
+            width: 40px;
+            height: 40px;
+
+            border-radius: 10px;
+            font-weight: 900;
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .pagination button:hover {
+            background: var(--primary-yellow);
+            color: black;
+        }
+
+        #pageInfo {
+            font-size: 0.85em;
+            font-weight: 700;
+            color: #aaa;
+        }
         
         .toast {
             position: fixed;
@@ -219,6 +254,54 @@
             transform: translateX(-50%) translateY(0);
         }
 
+        .summary-box {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .summary-card {
+            background: #252525;
+            border-radius: 14px;
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .summary-title {
+            font-size: 0.7em;
+            font-weight: 900;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            color: #888;
+        }
+
+        .summary-value {
+            font-size: 0.9em;
+            font-weight: 900;
+        }
+
+        .summary-card.pemasukan .summary-value {
+            color: var(--in-color);
+        }
+
+        .summary-card.pengeluaran .summary-value {
+            color: var(--out-color);
+        }
+
+        .summary-card.selisih.positive .summary-value {
+            color: var(--in-color);
+        }
+
+        .summary-card.selisih.negative .summary-value {
+            color: var(--out-color);
+        }
+
+        .summary-card.selisih.zero .summary-value {
+            color: #aaa;
+        }
+
         @media screen and (max-width: 480px) {
             th, td {
                 padding: 6px 4px !important; /* Padding lebih rapat */
@@ -236,6 +319,10 @@
             .tabel {
                 min-width: 400px;
                 width: 93%;
+            }
+
+            .summary-box {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -320,6 +407,25 @@
                 <div style="height: 250px; position: relative;">
                     <canvas id="financeChart"></canvas>
                 </div>
+
+                <div class="summary-box">
+    
+                    <div class="summary-card pemasukan">
+                        <div class="summary-title">PEMASUKAN</div>
+                        <div class="summary-value" id="sumMasuk">Rp 0</div>
+                    </div>
+
+                    <div class="summary-card pengeluaran">
+                        <div class="summary-title">PENGELUARAN</div>
+                        <div class="summary-value" id="sumKeluar">Rp 0</div>
+                    </div>
+
+                    <div class="summary-card selisih" id="selisihCard">
+                        <div class="summary-title">SELISIH</div>
+                        <div class="summary-value" id="sumSelisih">Rp 0</div>
+                    </div>
+
+                </div>
             </div>
         </div>
 
@@ -368,6 +474,21 @@
                 </thead>
                 <tbody id="tableBody"></tbody>
             </table>
+            <div class="pagination">
+
+                <button onclick="changePage(-1)">
+                    ◀
+                </button>
+
+                <span id="pageInfo">
+                    Halaman 1
+                </span>
+
+                <button onclick="changePage(1)">
+                    ▶
+                </button>
+
+            </div>
         </div>
     </div>
 
@@ -648,8 +769,49 @@
         if (chartData.length > 0) initChart(chartData);
     }
 
+    function updateSummary(data) {
+
+        let totalMasuk = 0;
+        let totalKeluar = 0;
+
+        data.forEach(r => {
+
+            const masuk = parseFloat(r[4].replace(/\./g, '')) || 0;
+            const keluar = parseFloat(r[5].replace(/\./g, '')) || 0;
+
+            totalMasuk += masuk;
+            totalKeluar += keluar;
+        });
+
+        const selisih = totalMasuk - totalKeluar;
+
+        document.getElementById('sumMasuk').innerText =
+            'Rp ' + totalMasuk.toLocaleString('id-ID');
+
+        document.getElementById('sumKeluar').innerText =
+            'Rp ' + totalKeluar.toLocaleString('id-ID');
+
+        document.getElementById('sumSelisih').innerText =
+            (selisih > 0 ? '+ ' : selisih < 0 ? '- ' : '') +
+            'Rp ' + Math.abs(selisih).toLocaleString('id-ID');
+
+        const card = document.getElementById('selisihCard');
+
+        card.classList.remove('positive', 'negative', 'zero');
+
+        if (selisih > 0) {
+            card.classList.add('positive');
+        } else if (selisih < 0) {
+            card.classList.add('negative');
+        } else {
+            card.classList.add('zero');
+        }
+    }
+
     // Tambahkan variabel global untuk menyimpan data filter
     let currentFilteredData = [];
+    let currentPageTable = 1;
+    const rowsPerPage = 20;
 
     function applyCanggih() {
         const dateMin = document.getElementById('fDateMin').value;
@@ -684,7 +846,9 @@
         });
 
         currentFilteredData = filtered; // Simpan ke variabel global
+        currentPageTable = 1;
         renderCanggih([...filtered].reverse());
+        updateSummary(filtered);
         
         // Jika sedang dalam mode CUSTOM, otomatis update grafiknya juga setiap kali filter berubah
         const customBtn = Array.from(document.querySelectorAll('.p-btn')).find(b => b.innerText === 'CUSTOM');
@@ -703,6 +867,7 @@
             const json = await res.json();
             fullData = json.allData;
             renderCanggih([...fullData].reverse());
+            updateSummary(fullData);
             setTimeout(() => {
                 updateChartPeriod('1W'); 
             }, 100);
@@ -722,23 +887,68 @@
     }
 
     function renderCanggih(data) {
-        document.getElementById('tableBody').innerHTML = data.map(r => {
-            // Karena sudah teks, kita tinggal rapikan tampilan tanggalnya saja
-            let tglTampil = r[0]; 
-            if(tglTampil.includes('-')) {
-                tglTampil = tglTampil.split('-').reverse().join('/');
-            }
 
-            return `
-            <tr style="border-bottom: 1px solid #333;">
-                <td style="padding: 8px;">${tglTampil}</td>
-                <td style="padding: 8px;">${r[1]}</td> <td style="padding: 8px;">${r[2]}</td>
-                <td style="padding: 8px;">${r[3]}</td>
-                <td style="padding: 8px; color:var(--in-color)">${r[4] != "0" ? r[4] : ''}</td>
-                <td style="padding: 8px; color:var(--out-color)">${r[5] != "0" ? r[5] : ''}</td>
-                <td style="padding: 8px; font-weight:bold;">${r[6]}</td>
-            </tr>`;
-        }).join('');
+        currentFilteredData = data;
+
+        const start = (currentPageTable - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+
+        const paginatedData = data.slice(start, end);
+
+        document.getElementById('tableBody').innerHTML =
+            paginatedData.map(r => {
+
+                let tglTampil = r[0];
+
+                if (tglTampil.includes('-')) {
+                    tglTampil = tglTampil.split('-').reverse().join('/');
+                }
+
+                return `
+                <tr style="border-bottom: 1px solid #333;">
+                    <td style="padding: 8px;">${tglTampil}</td>
+                    <td style="padding: 8px;">${r[1]}</td>
+                    <td style="padding: 8px;">${r[2]}</td>
+                    <td style="padding: 8px;">${r[3]}</td>
+                    <td style="padding: 8px; color:var(--in-color)">
+                        ${r[4] != "0" ? r[4] : ''}
+                    </td>
+                    <td style="padding: 8px; color:var(--out-color)">
+                        ${r[5] != "0" ? r[5] : ''}
+                    </td>
+                    <td style="padding: 8px; font-weight:bold;">
+                        ${r[6]}
+                    </td>
+                </tr>
+                `;
+            }).join('');
+
+        updatePageInfo();
+    }
+
+    function changePage(direction) {
+
+        const totalPages =
+            Math.ceil(currentFilteredData.length / rowsPerPage);
+
+        currentPageTable += direction;
+
+        if (currentPageTable < 1)
+            currentPageTable = 1;
+
+        if (currentPageTable > totalPages)
+            currentPageTable = totalPages;
+
+        renderCanggih(currentFilteredData);
+    }
+
+    function updatePageInfo() {
+
+        const totalPages =
+            Math.ceil(currentFilteredData.length / rowsPerPage);
+
+        document.getElementById('pageInfo').innerText =
+            `Halaman ${currentPageTable} / ${totalPages || 1}`;
     }
 
     // Interceptor Switch Page agar refresh otomatis
