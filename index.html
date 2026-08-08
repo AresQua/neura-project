@@ -515,7 +515,7 @@
 <script>
     let selectedType = '';
     let currentPage = 0;
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzp8SoitEpPyCbNy3C0r6i0KAYxbcIfEYJa6KiaRQIGl7pZ9YeXXEiG0Tq0OHbDjaoo/exec"; 
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwcsQR3TC6Kv5e1AcSyeEAqNkOFCCRPKW7KOlIj8zNdnrShrknMNm0NFn3Wee_M98wB/exec"; 
     const colorPalette = ["#ffee00", "#ffffff", "#ffcc00", "#e0e0e0"];
     const header = document.getElementById('header');
 
@@ -601,8 +601,13 @@
 
     window.onload = () => {
         const now = new Date();
-        document.getElementById('tgl').value = now.toISOString().split('T')[0];
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        
+        document.getElementById('tgl').value = `${year}-${month}-${day}`;
         document.getElementById('jam').value = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        
         for (let i = 0; i < 20; i++) createRandomTriangle();
         updateSaldoHeader();
     };
