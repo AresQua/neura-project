@@ -150,6 +150,21 @@
 
         .submit-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #b3a700; }
 
+        .submit-btn-2 {
+            width: 100%; padding: 18px; background: var(--primary-yellow);
+            color: black; border: none; border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 900 !important; font-size: 1.1em; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 2px;
+            margin-top: 30px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 0 #b3a700;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .submit-btn-2:active { transform: translateY(2px); box-shadow: 0 2px 0 #b3a700; }
+
         .history-item {
             display: flex; justify-content: space-between; align-items: center;
             padding: 12px 15px; cursor: pointer; border-bottom: 1px solid #333; color: #ccc;
@@ -426,6 +441,9 @@
                     </div>
 
                 </div>
+
+                <button class="submit-btn-2" id="btnLaporan" onclick="mintaLaporan()">MINTA LAPORAN</button>
+
             </div>
         </div>
 
@@ -497,15 +515,12 @@
 <script>
     let selectedType = '';
     let currentPage = 0;
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzj-YB5g3denKxOyc2QQm8UZKPso_orOVbj2Z475UpDjVkKw_VmBGUkNVDdAqkNrH5T/exec"; 
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzp8SoitEpPyCbNy3C0r6i0KAYxbcIfEYJa6KiaRQIGl7pZ9YeXXEiG0Tq0OHbDjaoo/exec"; 
     const colorPalette = ["#ffee00", "#ffffff", "#ffcc00", "#e0e0e0"];
     const header = document.getElementById('header');
 
     let touchstartX = 0;
     let touchendX = 0;
-    
-    document.addEventListener('touchstart', e => { touchstartX = e.changedTouches[0].screenX; });
-    document.addEventListener('touchend', e => { touchendX = e.changedTouches[0].screenX; handleGesture(); });
 
     function switchPage(index) {
         currentPage = index;
@@ -655,6 +670,37 @@
             btn.innerText = originalText;
             btn.disabled = false;
         }, 3000); 
+    }
+
+    async function mintaLaporan() {
+        const btn = document.getElementById('btnLaporan');
+        if (!btn) return;
+
+        const originalText = btn.innerText;
+        btn.innerText = "MENGANALISIS...";
+        btn.disabled = true;
+
+        try {
+            const url = new URL(WEB_APP_URL);
+            url.searchParams.append("action", "minta_laporan");
+
+            await fetch(url.toString());
+
+            if (typeof showToast === "function") {
+            showToast("Laporan sedang dikirim ke email kamu!");
+            } else {
+            alert("Laporan sedang dikirim ke email kamu!");
+            }
+        } catch (err) {
+            if (typeof showToast === "function") {
+            showToast("Gagal meminta laporan.");
+            } else {
+            alert("Gagal meminta laporan.");
+            }
+        } finally {
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }
     }
 
     function createRandomTriangle() {
