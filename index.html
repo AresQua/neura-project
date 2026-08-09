@@ -146,6 +146,7 @@
             box-shadow: 0 4px 0 #b3a700;
             -webkit-appearance: none;
             appearance: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .submit-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #b3a700; }
@@ -161,6 +162,7 @@
             box-shadow: 0 4px 0 #b3a700;
             -webkit-appearance: none;
             appearance: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .submit-btn-2:active { transform: translateY(2px); box-shadow: 0 2px 0 #b3a700; }
@@ -226,6 +228,7 @@
             cursor: pointer;
 
             transition: 0.2s;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .pagination button:hover {
@@ -380,7 +383,7 @@
             <div class="input-group" style="position: relative;">
                 <label>Jenis Laporan</label>
                 <input type="text" id="jenis" placeholder="Ketik jenis..." autocomplete="off" onfocus="showHistory()" oninput="filterHistory()">
-                <div id="custom-history-dropdown" style="display: none; position: absolute; width: 100%; background: #252525; border: 1px solid #444; border-radius: 10px; z-index: 100; max-height: 200px; overflow-y: auto; margin-top: 5px;"></div>
+                <div id="custom-history-dropdown" style="display: none; position: absolute; width: 100%; background: #252525; border: 1px solid #444; border-radius: 10px; z-index: 100; max-height: 200px; overflow-y: auto; margin-top: 5px; -webkit-tap-highlight-color: transparent;"></div>
             </div>
 
             <div class="input-group">
@@ -452,6 +455,7 @@
                 background: var(--btn-gray); border: none; color: white;
                 padding: 5px 12px; border-radius: 8px; font-size: 11px;
                 font-weight: 900; cursor: pointer; transition: 0.3s;
+                -webkit-tap-highlight-color: transparent;
             }
             .p-btn.active { background: var(--primary-yellow); color: black; }
         </style>
