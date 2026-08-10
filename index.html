@@ -1057,7 +1057,7 @@
                 const trBg = isSelected ? "background: var(--out-color); -webkit-tap-highlight-color: transparent;" : "";
 
                 return `
-                <tr style="border-bottom: 1px solid var(--bg-items); transition: 0.2s; ${trCursor} ${trBg}" 
+                <tr style="border-bottom: 1px solid var(--bg-items); transition: 0.2s; -webkit-tap-highlight-color: transparent; ${trCursor} ${trBg}" 
                     onclick="${isSelectMode ? `toggleRowSelection(${rowIdx})` : ''}">
                     <td style="padding: 8px;">${tglTampil}</td>
                     <td style="padding: 8px;">${r[1]}</td>
