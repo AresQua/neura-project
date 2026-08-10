@@ -320,6 +320,22 @@
             color: #aaa;
         }
 
+        .custom-alert-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8); z-index: 10000;
+            display: none; align-items: center; justify-content: center;
+            opacity: 0; transition: 0.3s ease;
+        }
+        .custom-alert-box {
+            background: var(--neru-black); border: 2px solid #333;
+            border-radius: 15px; padding: 25px; width: 80%; max-width: 320px;
+            text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            transform: scale(0.8); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .custom-alert-box h3 { color: var(--out-color); margin-top: 0; font-weight: 900; }
+        .custom-alert-box p { font-size: 0.9em; color: #ccc; margin-bottom: 20px; }
+        .alert-btn-group { display: flex; justify-content: center; gap: 10px; }
+
         @media screen and (max-width: 480px) {
             th, td {
                 padding: 6px 4px !important; /* Padding lebih rapat */
@@ -496,6 +512,12 @@
                 </thead>
                 <tbody id="tableBody"></tbody>
             </table>
+
+            <div style="display: flex; justify-content: flex-start; gap: 10px; margin: 15px 15px;">
+                <button class="p-btn" id="btnSelectMode" onclick="toggleSelectMode()" style="background: var(--btn-gray);">PILIH DATA</button>
+                <button class="p-btn" id="btnDeleteSelected" onclick="showCustomAlert()" style="display: none; background: var(--out-color);">HAPUS DATA (0)</button>
+            </div>
+
             <div class="pagination">
 
                 <button onclick="changePage(-1)">
@@ -514,14 +536,28 @@
         </div>
     </div>
 
+    <div class="custom-alert-overlay" id="customAlertOverlay">
+        <div class="custom-alert-box" id="customAlertBox">
+            <h3>HAPUS DATA?</h3>
+            <p id="alertMessage">Yakin ingin menghapus data yang dipilih? Data akan dihapus permanen dari spreadsheet.</p>
+            <div class="alert-btn-group">
+                <button class="p-btn" style="background: var(--btn-gray); font-size:1em; padding: 10px 20px; -webkit-tap-highlight-color: transparent;" onclick="closeCustomAlert()">BATAL</button>
+                <button class="p-btn" id="btnConfirmDelete" style="background: var(--out-color); font-size:1em; padding: 10px 20px; -webkit-tap-highlight-color: transparent;" onclick="executeDelete()">HAPUS</button>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script>
     let selectedType = '';
     let currentPage = 0;
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwcsQR3TC6Kv5e1AcSyeEAqNkOFCCRPKW7KOlIj8zNdnrShrknMNm0NFn3Wee_M98wB/exec"; 
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwHJyLvbjdM3XP8Fkknldd0G62ph-Gb9ofxhzZI8nL2AEGb-gaOHK4UZoTryV9WmpyF/exec"; 
     const colorPalette = ["#ffee00", "#ffffff", "#ffcc00", "#e0e0e0"];
     const header = document.getElementById('header');
+
+    let isSelectMode = false;
+    let selectedRows = [];
 
     let touchstartX = 0;
     let touchendX = 0;
@@ -952,28 +988,27 @@
 
         document.getElementById('tableBody').innerHTML =
             paginatedData.map(r => {
-
                 let tglTampil = r[0];
-
                 if (tglTampil.includes('-')) {
                     tglTampil = tglTampil.split('-').reverse().join('/');
                 }
 
+                // LOGIKA TAMPILAN MODE SELECT
+                const rowIdx = r[7]; // Indeks baris asli dari spreadsheet
+                const isSelected = selectedRows.includes(rowIdx);
+                const trCursor = isSelectMode ? "cursor: pointer;" : "";
+                const trBg = isSelected ? "background: var(--out-color);" : "";
+
                 return `
-                <tr style="border-bottom: 1px solid #333;">
+                <tr style="border-bottom: 1px solid #333; transition: 0.2s; ${trCursor} ${trBg}" 
+                    onclick="${isSelectMode ? `toggleRowSelection(${rowIdx})` : ''}">
                     <td style="padding: 8px;">${tglTampil}</td>
                     <td style="padding: 8px;">${r[1]}</td>
                     <td style="padding: 8px;">${r[2]}</td>
                     <td style="padding: 8px;">${r[3]}</td>
-                    <td style="padding: 8px; color:var(--in-color)">
-                        ${r[4] != "0" ? r[4] : ''}
-                    </td>
-                    <td style="padding: 8px; color:var(--out-color)">
-                        ${r[5] != "0" ? r[5] : ''}
-                    </td>
-                    <td style="padding: 8px; font-weight:bold;">
-                        ${r[6]}
-                    </td>
+                    <td style="padding: 8px; color:var(--in-color)">${r[4] != "0" ? r[4] : ''}</td>
+                    <td style="padding: 8px; color:var(--out-color)">${r[5] != "0" ? r[5] : ''}</td>
+                    <td style="padding: 8px; font-weight:bold;">${r[6]}</td>
                 </tr>
                 `;
             }).join('');
@@ -1026,6 +1061,109 @@ function showToast(msg) {
         t.classList.remove("show");
         setTimeout(() => t.remove(), 300);
     }, 2000);
+}
+
+function toggleSelectMode() {
+    isSelectMode = !isSelectMode;
+    selectedRows = []; // Reset pilihan setiap masuk/keluar mode
+    
+    const btnSelect = document.getElementById('btnSelectMode');
+    const btnDelete = document.getElementById('btnDeleteSelected');
+    
+    if (isSelectMode) {
+        btnSelect.style.background = "var(--primary-yellow)";
+        btnSelect.style.color = "black";
+        btnSelect.innerText = "BATALKAN PILIHAN";
+        btnDelete.style.display = "inline-block";
+    } else {
+        btnSelect.style.background = "var(--btn-gray)";
+        btnSelect.style.color = "white";
+        btnSelect.innerText = "PILIH DATA";
+        btnDelete.style.display = "none";
+    }
+    
+    updateDeleteButton();
+    renderCanggih(currentFilteredData); // Render ulang tabel untuk memunculkan checkbox
+}
+
+function toggleRowSelection(rowIdx) {
+    if (!isSelectMode) return;
+    
+    const index = selectedRows.indexOf(rowIdx);
+    if (index > -1) {
+        selectedRows.splice(index, 1); // Hapus centang
+    } else {
+        selectedRows.push(rowIdx); // Tambah centang
+    }
+    
+    updateDeleteButton();
+    renderCanggih(currentFilteredData); // Render ulang tabel agar sorotan dan checkbox terupdate
+}
+
+function updateDeleteButton() {
+    const btnDelete = document.getElementById('btnDeleteSelected');
+    btnDelete.innerText = `HAPUS DATA (${selectedRows.length})`;
+    btnDelete.disabled = selectedRows.length === 0;
+    btnDelete.style.opacity = selectedRows.length === 0 ? "0.5" : "1";
+}
+
+// --- CUSTOM ALERT LOGIC ---
+function showCustomAlert() {
+    if (selectedRows.length === 0) return;
+    document.getElementById('alertMessage').innerText = `Yakin ingin menghapus ${selectedRows.length} data yang dipilih?`;
+    
+    const overlay = document.getElementById('customAlertOverlay');
+    const box = document.getElementById('customAlertBox');
+    overlay.style.display = 'flex';
+    setTimeout(() => {
+        overlay.style.opacity = '1';
+        box.style.transform = 'scale(1)';
+    }, 10);
+}
+
+function closeCustomAlert() {
+    const overlay = document.getElementById('customAlertOverlay');
+    const box = document.getElementById('customAlertBox');
+    overlay.style.opacity = '0';
+    box.style.transform = 'scale(0.8)';
+    setTimeout(() => { overlay.style.display = 'none'; }, 300);
+}
+
+async function executeDelete() {
+    const btnConfirm = document.getElementById('btnConfirmDelete');
+    const originalText = btnConfirm.innerText;
+    btnConfirm.innerText = "MENGHAPUS...";
+    btnConfirm.disabled = true;
+
+    const formData = new URLSearchParams();
+    formData.append('aksi', 'delete');
+    formData.append('rows', selectedRows.join(',')); // Kirim baris contoh: "10,12,15"
+
+    try {
+        await fetch(WEB_APP_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: formData.toString()
+        });
+
+        closeCustomAlert();
+        showToast("Data berhasil dihapus!");
+        
+        // Matikan mode select & muat ulang data dari awal
+        toggleSelectMode(); 
+        loadTableData(); 
+
+        setTimeout(() => {
+            updateSaldoHeader();
+        }, 500);
+        
+    } catch (err) {
+        showToast("Gagal menghapus data.");
+    } finally {
+        btnConfirm.innerText = originalText;
+        btnConfirm.disabled = false;
+    }
 }
 
 </script>
