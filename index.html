@@ -376,7 +376,7 @@
         .picker-trigger{
             width:100%; background:var(--bg-items); color:var(--text-light);
             font-size:9px; border:1px solid #555; padding:5px; border-radius:6px;
-            cursor:pointer; text-align:left;
+            cursor:pointer; text-align:left; -webkit-tap-highlight-color: transparent;
         }
         .picker-trigger:hover{ border-color:var(--primary-yellow); }
         .picker-panel{
@@ -387,12 +387,14 @@
             opacity:0; pointer-events:none;
             transform:translateY(-6px) scale(0.96); transform-origin:top left;
             transition: opacity 0.18s ease, transform 0.18s cubic-bezier(0.34,1.2,0.64,1);
+            -webkit-tap-highlight-color: transparent;
         }
         .picker-panel.open{ opacity:1; pointer-events:auto; transform:translateY(0) scale(1); }
 
         .picker-actions button.picker-clear{
             color: var(--out-color);
-            margin-right: auto; /* biar Hapus nempel kiri, Batal/OK tetep ngumpul kanan */
+            margin-right: auto;
+            -webkit-tap-highlight-color: transparent; /* biar Hapus nempel kiri, Batal/OK tetep ngumpul kanan */
         }
         .picker-trigger.picker-trigger-lg{
             font-size: 16px;
@@ -400,58 +402,61 @@
             padding: 14px;
             border-radius: 12px;
             border: 2px solid var(--bg-items);
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .cal-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
-        .cal-title{ font-weight:900; font-size:0.8em; color:var(--text-light); }
-        .cal-nav{ background:var(--btn-gray); border:none; color:var(--text-light); width:22px; height:22px; border-radius:50%; cursor:pointer; font-size:0.8em; transition:0.15s; }
-        .cal-nav:hover{ background:var(--primary-yellow); color:black; transform:scale(1.1); }
-        .cal-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:2px; text-align:center; transition:opacity 0.12s ease; }
-        .cal-dow{ font-size:0.55em; color:#888; font-weight:700; padding-bottom:4px; }
+        .cal-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; -webkit-tap-highlight-color: transparent; }
+        .cal-title{ font-weight:900; font-size:0.8em; color:var(--text-light); -webkit-tap-highlight-color: transparent; }
+        .cal-nav{ background:var(--btn-gray); border:none; color:var(--text-light); width:22px; height:22px; border-radius:50%; cursor:pointer; font-size:0.8em; transition:0.15s; -webkit-tap-highlight-color: transparent; }
+        .cal-nav:hover{ background:var(--primary-yellow); color:black; transform:scale(1.1); -webkit-tap-highlight-color: transparent; }
+        .cal-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:2px; text-align:center; transition:opacity 0.12s ease; -webkit-tap-highlight-color: transparent; }
+        .cal-dow{ font-size:0.55em; color:#888; font-weight:700; padding-bottom:4px; -webkit-tap-highlight-color: transparent; }
         .cal-day{
             aspect-ratio:1; display:flex; align-items:center; justify-content:center;
             border-radius:50%; cursor:pointer; font-size:0.68em; color:var(--text-light);
-            transition: background 0.15s ease, color 0.15s ease;
+            transition: background 0.15s ease, color 0.15s ease; -webkit-tap-highlight-color: transparent;
         }
         .cal-day:hover{ background:#333; }
-        .cal-day.today{ color:var(--primary-yellow); font-weight:900; }
-        .cal-day.selected{ background:var(--primary-yellow); color:black; font-weight:900; animation: dayPop 0.25s ease; }
-        .cal-day.empty{ visibility:hidden; cursor:default; }
+        .cal-day.today{ color:var(--primary-yellow); font-weight:900; -webkit-tap-highlight-color: transparent; }
+        .cal-day.selected{ background:var(--primary-yellow); color:black; font-weight:900; animation: dayPop 0.25s ease; -webkit-tap-highlight-color: transparent; }
+        .cal-day.empty{ visibility:hidden; cursor:default; -webkit-tap-highlight-color: transparent; }
         @keyframes dayPop{ 0%{transform:scale(0.6);} 65%{transform:scale(1.15);} 100%{transform:scale(1);} }
 
-        .time-display{ display:flex; justify-content:center; align-items:center; gap:2px; margin-bottom:14px; }
-        .time-num{ font-size:1.5em; font-weight:900; color:#555; cursor:pointer; padding:2px 6px; border-radius:6px; transition: background 0.15s ease, color 0.15s ease; }
-        .time-num.active{ color:var(--primary-yellow); background:#1a1a1a; }
-        .time-colon{ font-size:1.5em; font-weight:900; color:#555; }
+        .time-display{ display:flex; justify-content:center; align-items:center; gap:2px; margin-bottom:14px; -webkit-tap-highlight-color: transparent; }
+        .time-num{ font-size:1.5em; font-weight:900; color:#555; cursor:pointer; padding:2px 6px; border-radius:6px; transition: background 0.15s ease, color 0.15s ease; -webkit-tap-highlight-color: transparent; }
+        .time-num.active{ color:var(--primary-yellow); background:#1a1a1a; -webkit-tap-highlight-color: transparent; }
+        .time-colon{ font-size:1.5em; font-weight:900; color:#555; -webkit-tap-highlight-color: transparent; }
 
-        .clock-face{ position:relative; width:190px; height:190px; border-radius:50%; background:#1a1a1a; margin:0 auto; user-select:none; touch-action:none; }
-        .clock-center{ position:absolute; top:50%; left:50%; width:6px; height:6px; background:var(--primary-yellow); border-radius:50%; transform:translate(-50%,-50%); z-index:5; }
+        .clock-face{ position:relative; width:190px; height:190px; border-radius:50%; background:#1a1a1a; margin:0 auto; user-select:none; touch-action:none; -webkit-tap-highlight-color: transparent; }
+        .clock-center{ position:absolute; top:50%; left:50%; width:6px; height:6px; background:var(--primary-yellow); border-radius:50%; transform:translate(-50%,-50%); z-index:5; -webkit-tap-highlight-color: transparent; }
         .clock-hand{
             position:absolute; bottom:50%; left:50%; width:2px; background:var(--primary-yellow);
             transform-origin:bottom center; z-index:3; pointer-events:none;
             transition: height 0.2s cubic-bezier(0.34,1.2,0.64,1), transform 0.2s cubic-bezier(0.34,1.2,0.64,1);
+            -webkit-tap-highlight-color: transparent;
         }
-        .clock-hand-end{ position:absolute; width:28px; height:28px; background:var(--primary-yellow); border-radius:50%; top:-14px; left:50%; transform:translateX(-50%); }
+        .clock-hand-end{ position:absolute; width:28px; height:28px; background:var(--primary-yellow); border-radius:50%; top:-14px; left:50%; transform:translateX(-50%); -webkit-tap-highlight-color: transparent; }
         .clock-num{
             position:absolute; display:flex; align-items:center; justify-content:center;
             font-weight:700; color:var(--text-light); border-radius:50%; cursor:pointer;
             transform:translate(-50%,-50%); z-index:4;
             animation: numPop 0.18s ease;
             transition: background 0.15s ease, color 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
         }
-        .clock-num.outer{ width:26px; height:26px; font-size:0.68em; }
-        .clock-num.inner{ width:22px; height:22px; font-size:0.52em; color:#888; }
-        .clock-num.selected{ color:black; font-weight:900; background:var(--primary-yellow); }
+        .clock-num.outer{ width:26px; height:26px; font-size:0.68em; -webkit-tap-highlight-color: transparent; }
+        .clock-num.inner{ width:22px; height:22px; font-size:0.52em; color:#888; -webkit-tap-highlight-color: transparent; }
+        .clock-num.selected{ color:black; font-weight:900; background:var(--primary-yellow); -webkit-tap-highlight-color: transparent; }
         @keyframes numPop{ from{opacity:0; transform:translate(-50%,-50%) scale(0.4);} to{opacity:1; transform:translate(-50%,-50%) scale(1);} }
 
-        .picker-actions{ display:flex; justify-content:flex-end; gap:2px; margin-top:12px; }
-        .picker-actions button{ background:none; border:none; color:var(--primary-yellow); font-weight:900; font-size:0.65em; text-transform:uppercase; letter-spacing:0.5px; padding:6px 10px; border-radius:6px; cursor:pointer; transition:background 0.15s ease; }
+        .picker-actions{ display:flex; justify-content:flex-end; gap:2px; margin-top:12px; -webkit-tap-highlight-color: transparent; }
+        .picker-actions button{ background:none; border:none; color:var(--primary-yellow); font-weight:900; font-size:0.65em; text-transform:uppercase; letter-spacing:0.5px; padding:6px 10px; border-radius:6px; cursor:pointer; transition:background 0.15s ease; -webkit-tap-highlight-color: transparent; }
         .picker-actions button:hover{ background:#333; }
 
         /* buat select all / unselect all di filter Jenis */
-        .jenis-bulk-actions{ display:flex; gap:6px; margin-bottom:8px; padding-bottom:8px; border-bottom:1px solid var(--border-line); }
-        .jenis-bulk-actions button{ flex:1; background:var(--btn-gray); border:none; color:var(--primary-yellow); font-size:10px; font-weight:900; padding:5px; border-radius:6px; cursor:pointer; }
-        .jenis-bulk-actions button:hover{ background:var(--primary-yellow); color:black; }
+        .jenis-bulk-actions{ display:flex; gap:6px; margin-bottom:8px; padding-bottom:8px; border-bottom:1px solid var(--border-line); -webkit-tap-highlight-color: transparent; }
+        .jenis-bulk-actions button{ flex:1; background:var(--btn-gray); border:none; color:var(--primary-yellow); font-size:10px; font-weight:900; padding:5px; border-radius:6px; cursor:pointer; -webkit-tap-highlight-color: transparent; }
+        .jenis-bulk-actions button:hover{ background:var(--primary-yellow); color:black; -webkit-tap-highlight-color: transparent; }
 
         @media screen and (max-width: 480px) {
             th, td {
@@ -474,6 +479,12 @@
 
             .summary-box {
                 grid-template-columns: 1fr;
+            }
+
+            .picker-field[data-field="jam"] .picker-panel{
+                left: auto;
+                right: 0;
+                transform-origin: top right;
             }
         }
     </style>
@@ -925,8 +936,10 @@
     async function kirimData() {
         const nominalStr = document.getElementById('nominal').value.replace(/\./g, "");
         const jenis = document.getElementById('jenis').value;
+        const tanggalVal = getPickerDateValue('tgl');
+        const waktuVal = getPickerTimeValue('jam');
 
-        if(!selectedType || !nominalStr || !jenis) {
+        if(!selectedType || !nominalStr || !jenis || !tanggalVal || !waktuVal) {
             showToast("Harap Lengkapi Data!");
             return;
         }
@@ -937,8 +950,8 @@
         btn.disabled = true;
 
         const formData = new URLSearchParams();
-        formData.append('tanggal', getPickerDateValue('tgl'));
-        formData.append('waktu', getPickerTimeValue('jam'));
+        formData.append('tanggal', tanggalVal);
+        formData.append('waktu', waktuVal);
         formData.append('jenis', jenis);
         formData.append('keterangan', document.getElementById('keterangan').value);
         formData.append('nominal', nominalStr);
