@@ -17,6 +17,7 @@
             --bright-yellow: #fff200;
             --neru-black: #1a1a1a;
             --bg-dark: #121212;
+            --baground-dark: #252525;
             --text-light: #ffffff;
             --in-color: #2ecc71;
             --out-color: #e74c3c;
@@ -129,7 +130,7 @@
         
         input, textarea {
             width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #333;
-            background: #252525; color: white; box-sizing: border-box; font-size: 16px;
+            background: var(--baground-dark); color: white; box-sizing: border-box; font-size: 16px;
             font-family: 'Inter', sans-serif; font-weight: 700;
         }
 
@@ -280,7 +281,7 @@
         }
 
         .summary-card {
-            background: #252525;
+            background: var(--baground-dark);
             border-radius: 14px;
             padding: 12px;
             text-align: center;
@@ -335,6 +336,38 @@
         .custom-alert-box h3 { color: var(--out-color); margin-top: 0; font-weight: 900; }
         .custom-alert-box p { font-size: 0.9em; color: #ccc; margin-bottom: 20px; }
         .alert-btn-group { display: flex; justify-content: center; gap: 10px; }
+
+        .jenis-dropdown-panel {
+            display: none;
+            position: absolute;
+            top: 100%; left: 0;
+            background: var(--baground-dark);
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 8px;
+            z-index: 200;
+            min-width: 140px;
+            max-height: 200px;
+            overflow-y: auto;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+            text-align: left;
+        }
+        .jenis-dropdown-panel.open { display: block; }
+        .jenis-dropdown-panel label {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 11px; font-weight: 400; text-transform: none;
+            color: white; padding: 4px 0; cursor: pointer;
+            text-align: left; justify-content: flex-start; width: 100%;
+        }
+
+        .jenis-dropdown-panel label input[type="checkbox"] {
+            flex-shrink: 0;
+            width: 10%;
+        }
+        .jenis-dropdown-panel label span {
+            flex: 1;
+            text-align: left;
+        }
 
         @media screen and (max-width: 480px) {
             th, td {
@@ -399,7 +432,7 @@
             <div class="input-group" style="position: relative;">
                 <label>Jenis Laporan</label>
                 <input type="text" id="jenis" placeholder="Ketik jenis..." autocomplete="off" onfocus="showHistory()" oninput="filterHistory()">
-                <div id="custom-history-dropdown" style="display: none; position: absolute; width: 100%; background: #252525; border: 1px solid #444; border-radius: 10px; z-index: 100; max-height: 200px; overflow-y: auto; margin-top: 5px; -webkit-tap-highlight-color: transparent;"></div>
+                <div id="custom-history-dropdown" style="display: none; position: absolute; width: 100%; background: var(--baground-dark); border: 1px solid #444; border-radius: 10px; z-index: 100; max-height: 200px; overflow-y: auto; margin-top: 5px; -webkit-tap-highlight-color: transparent;"></div>
             </div>
 
             <div class="input-group">
@@ -487,7 +520,7 @@
                         <th style="padding: 8px; border: 1px solid #444;">KELUAR</th>
                         <th style="padding: 8px; border: 1px solid #444;"><button onclick="toggleFilter('saldo')" style="background:none; border:none; color:inherit; font-weight:900; font-size:1em;">SALDO</button></th>
                     </tr>
-                    <tr id="filterRow" style="display: none; background: #252525;">
+                    <tr id="filterRow" style="display: none; background: var(--baground-dark);">
                         <th style="padding: 5px;">
                             <input type="date" id="fDateMin" oninput="applyCanggih()" style="font-size:9px; width:100%; margin-bottom:2px;" placeholder="Dari">
                             <input type="date" id="fDateMax" oninput="applyCanggih()" style="font-size:9px; width:100%;" placeholder="Sampai">
@@ -496,8 +529,12 @@
                             <input type="time" id="fTimeMin" oninput="applyCanggih()" style="font-size:9px; width:100%; margin-bottom:2px;">
                             <input type="time" id="fTimeMax" oninput="applyCanggih()" style="font-size:9px; width:100%;">
                         </th>
-                        <th style="padding: 5px;">
-                            <select id="fJenis" onchange="applyCanggih()" style="width:100%; background:#333; color:white; font-size:10px;"></select>
+                        <th style="padding: 5px; position: relative;">
+                            <button type="button" onclick="toggleJenisDropdown()" 
+                                    style="width:100%; background:#333; color:white; font-size:10px; border:1px solid #555; padding:6px; border-radius:6px;">
+                                Jenis ▾
+                            </button>
+                            <div id="jenisDropdownPanel" class="jenis-dropdown-panel"></div>
                         </th>
                         <th style="padding: 5px;">
                             <input type="text" id="fKet" oninput="applyCanggih()" placeholder="..." style="font-size:10px; padding:4px;">
@@ -909,7 +946,7 @@
         const dateMax = document.getElementById('fDateMax').value;
         const timeMin = document.getElementById('fTimeMin').value;
         const timeMax = document.getElementById('fTimeMax').value;
-        const fJenis = document.getElementById('fJenis').value;
+        const fJenisArr = Array.from(document.querySelectorAll('.jenisCheck:checked')).map(cb => cb.value);
         const fKet = document.getElementById('fKet').value.toLowerCase();
         const saldoMin = parseFloat(document.getElementById('fSaldoMin').value) || -Infinity;
         const saldoMax = parseFloat(document.getElementById('fSaldoMax').value) || Infinity;
@@ -925,7 +962,7 @@
                             (timeMax ? rowTime <= timeMax : true);
 
             // Logika Filter Jenis & Keterangan
-            const matchJenis = fJenis ? r[2] === fJenis : true;
+            const matchJenis = fJenisArr.length === 0 || fJenisArr.includes(r[2]);
             const matchKet = fKet ? r[3].toLowerCase().includes(fKet) : true;
 
             // Logika Filter Saldo (r[6])
@@ -972,10 +1009,27 @@
     }
 
     function populateJenisFilter(data) {
-        const select = document.getElementById('fJenis');
+        const panel = document.getElementById('jenisDropdownPanel');
         const unik = [...new Set(data.map(r => r[2]))];
-        select.innerHTML = '<option value="">Semua</option>' + unik.map(j => `<option value="${j}">${j}</option>`).join('');
+        panel.innerHTML = unik.map(j => `
+            <label>
+                <input type="checkbox" class="jenisCheck" value="${j}" checked onchange="applyCanggih()">
+                ${j}
+            </label>
+        `).join('');
     }
+
+    function toggleJenisDropdown() {
+        document.getElementById('jenisDropdownPanel').classList.toggle('open');
+    }
+
+    // biar panel nutup pas klik di luar area dropdown
+    document.addEventListener('click', (e) => {
+        const panel = document.getElementById('jenisDropdownPanel');
+        if (panel && !e.target.closest('th') && panel.classList.contains('open')) {
+            panel.classList.remove('open');
+        }
+    });
 
     function renderCanggih(data) {
 
