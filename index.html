@@ -372,6 +372,87 @@
             text-align: left;
         }
 
+        .picker-field{ position:relative; }
+        .picker-trigger{
+            width:100%; background:var(--bg-items); color:var(--text-light);
+            font-size:9px; border:1px solid #555; padding:5px; border-radius:6px;
+            cursor:pointer; text-align:left;
+        }
+        .picker-trigger:hover{ border-color:var(--primary-yellow); }
+        .picker-panel{
+            position:absolute; top:calc(100% + 4px); left:0;
+            background:var(--baground-dark); border:1px solid var(--border-line);
+            border-radius:12px; padding:14px; z-index:200; width:220px;
+            box-shadow:0 6px 16px rgba(0,0,0,0.5);
+            opacity:0; pointer-events:none;
+            transform:translateY(-6px) scale(0.96); transform-origin:top left;
+            transition: opacity 0.18s ease, transform 0.18s cubic-bezier(0.34,1.2,0.64,1);
+        }
+        .picker-panel.open{ opacity:1; pointer-events:auto; transform:translateY(0) scale(1); }
+
+        .picker-actions button.picker-clear{
+            color: var(--out-color);
+            margin-right: auto; /* biar Hapus nempel kiri, Batal/OK tetep ngumpul kanan */
+        }
+        .picker-trigger.picker-trigger-lg{
+            font-size: 16px;
+            font-weight: 700;
+            padding: 14px;
+            border-radius: 12px;
+            border: 2px solid var(--bg-items);
+        }
+
+        .cal-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+        .cal-title{ font-weight:900; font-size:0.8em; color:var(--text-light); }
+        .cal-nav{ background:var(--btn-gray); border:none; color:var(--text-light); width:22px; height:22px; border-radius:50%; cursor:pointer; font-size:0.8em; transition:0.15s; }
+        .cal-nav:hover{ background:var(--primary-yellow); color:black; transform:scale(1.1); }
+        .cal-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:2px; text-align:center; transition:opacity 0.12s ease; }
+        .cal-dow{ font-size:0.55em; color:#888; font-weight:700; padding-bottom:4px; }
+        .cal-day{
+            aspect-ratio:1; display:flex; align-items:center; justify-content:center;
+            border-radius:50%; cursor:pointer; font-size:0.68em; color:var(--text-light);
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+        .cal-day:hover{ background:#333; }
+        .cal-day.today{ color:var(--primary-yellow); font-weight:900; }
+        .cal-day.selected{ background:var(--primary-yellow); color:black; font-weight:900; animation: dayPop 0.25s ease; }
+        .cal-day.empty{ visibility:hidden; cursor:default; }
+        @keyframes dayPop{ 0%{transform:scale(0.6);} 65%{transform:scale(1.15);} 100%{transform:scale(1);} }
+
+        .time-display{ display:flex; justify-content:center; align-items:center; gap:2px; margin-bottom:14px; }
+        .time-num{ font-size:1.5em; font-weight:900; color:#555; cursor:pointer; padding:2px 6px; border-radius:6px; transition: background 0.15s ease, color 0.15s ease; }
+        .time-num.active{ color:var(--primary-yellow); background:#1a1a1a; }
+        .time-colon{ font-size:1.5em; font-weight:900; color:#555; }
+
+        .clock-face{ position:relative; width:190px; height:190px; border-radius:50%; background:#1a1a1a; margin:0 auto; user-select:none; touch-action:none; }
+        .clock-center{ position:absolute; top:50%; left:50%; width:6px; height:6px; background:var(--primary-yellow); border-radius:50%; transform:translate(-50%,-50%); z-index:5; }
+        .clock-hand{
+            position:absolute; bottom:50%; left:50%; width:2px; background:var(--primary-yellow);
+            transform-origin:bottom center; z-index:3; pointer-events:none;
+            transition: height 0.2s cubic-bezier(0.34,1.2,0.64,1), transform 0.2s cubic-bezier(0.34,1.2,0.64,1);
+        }
+        .clock-hand-end{ position:absolute; width:28px; height:28px; background:var(--primary-yellow); border-radius:50%; top:-14px; left:50%; transform:translateX(-50%); }
+        .clock-num{
+            position:absolute; display:flex; align-items:center; justify-content:center;
+            font-weight:700; color:var(--text-light); border-radius:50%; cursor:pointer;
+            transform:translate(-50%,-50%); z-index:4;
+            animation: numPop 0.18s ease;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+        .clock-num.outer{ width:26px; height:26px; font-size:0.68em; }
+        .clock-num.inner{ width:22px; height:22px; font-size:0.52em; color:#888; }
+        .clock-num.selected{ color:black; font-weight:900; background:var(--primary-yellow); }
+        @keyframes numPop{ from{opacity:0; transform:translate(-50%,-50%) scale(0.4);} to{opacity:1; transform:translate(-50%,-50%) scale(1);} }
+
+        .picker-actions{ display:flex; justify-content:flex-end; gap:2px; margin-top:12px; }
+        .picker-actions button{ background:none; border:none; color:var(--primary-yellow); font-weight:900; font-size:0.65em; text-transform:uppercase; letter-spacing:0.5px; padding:6px 10px; border-radius:6px; cursor:pointer; transition:background 0.15s ease; }
+        .picker-actions button:hover{ background:#333; }
+
+        /* buat select all / unselect all di filter Jenis */
+        .jenis-bulk-actions{ display:flex; gap:6px; margin-bottom:8px; padding-bottom:8px; border-bottom:1px solid var(--border-line); }
+        .jenis-bulk-actions button{ flex:1; background:var(--btn-gray); border:none; color:var(--primary-yellow); font-size:10px; font-weight:900; padding:5px; border-radius:6px; cursor:pointer; }
+        .jenis-bulk-actions button:hover{ background:var(--primary-yellow); color:black; }
+
         @media screen and (max-width: 480px) {
             th, td {
                 padding: 6px 4px !important; /* Padding lebih rapat */
@@ -424,11 +505,42 @@
             <div style="display: flex; gap: 12px;">
                 <div class="input-group" style="flex: 1;">
                     <label>Tanggal</label>
-                    <input type="date" id="tgl">
+                    <div class="picker-field" data-field="tgl" data-type="date" data-placeholder="dd/mm/yyyy">
+                        <button type="button" class="picker-trigger picker-trigger-lg" onclick="togglePicker(this, event)"><span class="picker-label">dd/mm/yyyy</span></button>
+                        <div class="picker-panel">
+                            <div class="cal-header">
+                                <button type="button" class="cal-nav" onclick="changeMonth(this, -1)">‹</button>
+                                <div class="cal-title"></div>
+                                <button type="button" class="cal-nav" onclick="changeMonth(this, 1)">›</button>
+                            </div>
+                            <div class="cal-grid"></div>
+                            <div class="picker-actions">
+                                <button type="button" class="picker-clear" onclick="clearPicker(this)">Hapus</button>
+                                <button type="button" onclick="cancelPicker(this)">Batal</button>
+                                <button type="button" onclick="confirmDatePicker(this)">OK</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="input-group" style="flex: 1;">
                     <label>Waktu</label>
-                    <input type="time" id="jam">
+                    <div class="picker-field" data-field="jam" data-type="time" data-placeholder="--:--">
+                        <button type="button" class="picker-trigger picker-trigger-lg" onclick="togglePicker(this, event)"><span class="picker-label">--:--</span></button>
+                        <div class="picker-panel">
+                            <div class="time-display">
+                                <span class="time-num hour-num" onclick="setTimeMode(this,'hour')"></span><span class="time-colon">:</span><span class="time-num min-num" onclick="setTimeMode(this,'minute')"></span>
+                            </div>
+                            <div class="clock-face" onclick="clockClick(this, event)">
+                                <div class="clock-center"></div>
+                                <div class="clock-hand"><div class="clock-hand-end"></div></div>
+                            </div>
+                            <div class="picker-actions">
+                                <button type="button" class="picker-clear" onclick="clearPicker(this)">Hapus</button>
+                                <button type="button" onclick="cancelPicker(this)">Batal</button>
+                                <button type="button" onclick="confirmTimePicker(this)">OK</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -466,11 +578,41 @@
                 <div id="customPeriodBox" style="display: none; gap: 10px; margin-top: 10px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; margin-bottom: 10px;">
                     <div style="flex: 1;">
                         <label style="font-size: 9px; color: #888;">DARI:</label>
-                        <input type="date" id="chartStart" onchange="updateChartPeriod('CUSTOM')" style="font-size: 11px; padding: 5px;">
+                        <div class="picker-field" data-field="chartStart" data-type="date" data-onconfirm="updateChartPeriodCustom" data-placeholder="dd/mm/yyyy">
+                            <button type="button" class="picker-trigger" onclick="togglePicker(this, event)"><span class="picker-label">dd/mm/yyyy</span></button>
+                            <div class="picker-panel">
+                                <div class="cal-header">
+                                    <button type="button" class="cal-nav" onclick="changeMonth(this, -1)">‹</button>
+                                    <div class="cal-title"></div>
+                                    <button type="button" class="cal-nav" onclick="changeMonth(this, 1)">›</button>
+                                </div>
+                                <div class="cal-grid"></div>
+                                <div class="picker-actions">
+                                    <button type="button" class="picker-clear" onclick="clearPicker(this)">Hapus</button>
+                                    <button type="button" onclick="cancelPicker(this)">Batal</button>
+                                    <button type="button" onclick="confirmDatePicker(this)">OK</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div style="flex: 1;">
                         <label style="font-size: 9px; color: #888;">SAMPAI:</label>
-                        <input type="date" id="chartEnd" onchange="updateChartPeriod('CUSTOM')" style="font-size: 11px; padding: 5px;">
+                        <div class="picker-field" data-field="chartEnd" data-type="date" data-onconfirm="updateChartPeriodCustom" data-placeholder="dd/mm/yyyy">
+                            <button type="button" class="picker-trigger" onclick="togglePicker(this, event)"><span class="picker-label">dd/mm/yyyy</span></button>
+                            <div class="picker-panel">
+                                <div class="cal-header">
+                                    <button type="button" class="cal-nav" onclick="changeMonth(this, -1)">‹</button>
+                                    <div class="cal-title"></div>
+                                    <button type="button" class="cal-nav" onclick="changeMonth(this, 1)">›</button>
+                                </div>
+                                <div class="cal-grid"></div>
+                                <div class="picker-actions">
+                                    <button type="button" class="picker-clear" onclick="clearPicker(this)">Hapus</button>
+                                    <button type="button" onclick="cancelPicker(this)">Batal</button>
+                                    <button type="button" onclick="confirmDatePicker(this)">OK</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -525,12 +667,74 @@
                     </tr>
                     <tr id="filterRow" style="display: none; background: var(--baground-dark);">
                         <th style="padding: 5px;">
-                            <input type="date" id="fDateMin" oninput="applyCanggih()" style="font-size:9px; width:100%; margin-bottom:2px;" placeholder="Dari">
-                            <input type="date" id="fDateMax" oninput="applyCanggih()" style="font-size:9px; width:100%;" placeholder="Sampai">
+                            <div class="picker-field" data-field="fDateMin" data-type="date" data-onconfirm="applyCanggih" 	data-placeholder="Dari" style="margin-bottom:2px;">
+                                <button type="button" class="picker-trigger" onclick="togglePicker(this, event)"><span class="picker-label">Dari</span></button>
+                                <div class="picker-panel">
+                                    <div class="cal-header">
+                                        <button type="button" class="cal-nav" onclick="changeMonth(this, -1)">‹</button>
+                                        <div class="cal-title"></div>
+                                        <button type="button" class="cal-nav" onclick="changeMonth(this, 1)">›</button>
+                                    </div>
+                                    <div class="cal-grid"></div>
+                                    <div class="picker-actions">
+                                        <button type="button" class="picker-clear" onclick="clearPicker(this)">Hapus</button>
+                                        <button type="button" onclick="cancelPicker(this)">Batal</button>
+                                        <button type="button" onclick="confirmDatePicker(this)">OK</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="picker-field" data-field="fDateMax" data-type="date" data-onconfirm="applyCanggih" data-placeholder="Sampai">
+                                <button type="button" class="picker-trigger" onclick="togglePicker(this, event)"><span class="picker-label">Sampai</span></button>
+                                <div class="picker-panel">
+                                    <div class="cal-header">
+                                        <button type="button" class="cal-nav" onclick="changeMonth(this, -1)">‹</button>
+                                        <div class="cal-title"></div>
+                                        <button type="button" class="cal-nav" onclick="changeMonth(this, 1)">›</button>
+                                    </div>
+                                    <div class="cal-grid"></div>
+                                    <div class="picker-actions">
+                                        <button type="button" class="picker-clear" onclick="clearPicker(this)">Hapus</button>
+                                        <button type="button" onclick="cancelPicker(this)">Batal</button>
+                                        <button type="button" onclick="confirmDatePicker(this)">OK</button>
+                                    </div>
+                                </div>
+                            </div>
                         </th>
                         <th style="padding: 5px;">
-                            <input type="time" id="fTimeMin" oninput="applyCanggih()" style="font-size:9px; width:100%; margin-bottom:2px;">
-                            <input type="time" id="fTimeMax" oninput="applyCanggih()" style="font-size:9px; width:100%;">
+                            <div class="picker-field" data-field="fTimeMin" data-type="time" data-onconfirm="applyCanggih" data-placeholder="--:--" style="margin-bottom:2px;">
+                                <button type="button" class="picker-trigger" onclick="togglePicker(this, event)"><span class="picker-label">--:--</span></button>
+                                <div class="picker-panel">
+                                    <div class="time-display">
+                                        <span class="time-num hour-num" onclick="setTimeMode(this,'hour')"></span><span class="time-colon">:</span><span class="time-num min-num" onclick="setTimeMode(this,'minute')"></span>
+                                    </div>
+                                    <div class="clock-face" onclick="clockClick(this, event)">
+                                        <div class="clock-center"></div>
+                                        <div class="clock-hand"><div class="clock-hand-end"></div></div>
+                                    </div>
+                                    <div class="picker-actions">
+                                        <button type="button" class="picker-clear" onclick="clearPicker(this)">Hapus</button>
+                                        <button type="button" onclick="cancelPicker(this)">Batal</button>
+                                        <button type="button" onclick="confirmTimePicker(this)">OK</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="picker-field" data-field="fTimeMax" data-type="time" data-onconfirm="applyCanggih" data-placeholder="--:--">
+                                <button type="button" class="picker-trigger" onclick="togglePicker(this, event)"><span class="picker-label">--:--</span></button>
+                                <div class="picker-panel">
+                                    <div class="time-display">
+                                        <span class="time-num hour-num" onclick="setTimeMode(this,'hour')"></span><span class="time-colon">:</span><span class="time-num min-num" onclick="setTimeMode(this,'minute')"></span>
+                                    </div>
+                                    <div class="clock-face" onclick="clockClick(this, event)">
+                                        <div class="clock-center"></div>
+                                        <div class="clock-hand"><div class="clock-hand-end"></div></div>
+                                    </div>
+                                    <div class="picker-actions">
+                                        <button type="button" class="picker-clear" onclick="clearPicker(this)">Hapus</button>
+                                        <button type="button" onclick="cancelPicker(this)">Batal</button>
+                                        <button type="button" onclick="confirmTimePicker(this)">OK</button>
+                                    </div>
+                                </div>
+                            </div>
                         </th>
                         <th style="padding: 5px; position: relative;">
                             <button type="button" onclick="toggleJenisDropdown()" 
@@ -681,13 +885,18 @@
 
     window.onload = () => {
         const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-        
-        document.getElementById('tgl').value = `${year}-${month}-${day}`;
-        document.getElementById('jam').value = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-        
+
+        ensurePickerData('tgl', 'date');
+        pickerData['tgl'].confirmedDate = now;
+        document.querySelector('.picker-field[data-field="tgl"] .picker-label').innerText =
+            `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()}`;
+
+        ensurePickerData('jam', 'time');
+        pickerData['jam'].confirmedHour = now.getHours();
+        pickerData['jam'].confirmedMinute = now.getMinutes();
+        document.querySelector('.picker-field[data-field="jam"] .picker-label').innerText =
+            `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
         for (let i = 0; i < 20; i++) createRandomTriangle();
         updateSaldoHeader();
     };
@@ -728,8 +937,8 @@
         btn.disabled = true;
 
         const formData = new URLSearchParams();
-        formData.append('tanggal', document.getElementById('tgl').value);
-        formData.append('waktu', document.getElementById('jam').value);
+        formData.append('tanggal', getPickerDateValue('tgl'));
+        formData.append('waktu', getPickerTimeValue('jam'));
         formData.append('jenis', jenis);
         formData.append('keterangan', document.getElementById('keterangan').value);
         formData.append('nominal', nominalStr);
@@ -878,8 +1087,8 @@
         } else if (period === '1Y') {
             startDate.setFullYear(now.getFullYear() - 1);
         } else if (period === 'CUSTOM') {
-            const sVal = document.getElementById('chartStart').value;
-            const eVal = document.getElementById('chartEnd').value;
+            const sVal = getPickerDateValue('chartStart');
+            const eVal = getPickerDateValue('chartEnd');
             if (!sVal || !eVal) return; // Tunggu sampai kedua tanggal diisi
             startDate = new Date(sVal);
             endDate = new Date(eVal);
@@ -899,6 +1108,8 @@
 
         if (chartData.length > 0) initChart(chartData);
     }
+
+    function updateChartPeriodCustom(){ updateChartPeriod('CUSTOM'); }
 
     function updateSummary(data) {
 
@@ -945,10 +1156,10 @@
     const rowsPerPage = 20;
 
     function applyCanggih() {
-        const dateMin = document.getElementById('fDateMin').value;
-        const dateMax = document.getElementById('fDateMax').value;
-        const timeMin = document.getElementById('fTimeMin').value;
-        const timeMax = document.getElementById('fTimeMax').value;
+        const dateMin = getPickerDateValue('fDateMin');
+        const dateMax = getPickerDateValue('fDateMax');
+        const timeMin = getPickerTimeValue('fTimeMin');
+        const timeMax = getPickerTimeValue('fTimeMax');
         const fJenisArr = Array.from(document.querySelectorAll('.jenisCheck:checked')).map(cb => cb.value);
         const fKet = document.getElementById('fKet').value.toLowerCase();
         const saldoMin = parseFloat(document.getElementById('fSaldoMin').value) || -Infinity;
@@ -1014,12 +1225,24 @@
     function populateJenisFilter(data) {
         const panel = document.getElementById('jenisDropdownPanel');
         const unik = [...new Set(data.map(r => r[2]))];
-        panel.innerHTML = unik.map(j => `
+        const checkboxes = unik.map(j => `
             <label>
                 <input type="checkbox" class="jenisCheck" value="${j}" checked onchange="applyCanggih()">
-                ${j}
+                <span>${j}</span>
             </label>
         `).join('');
+        panel.innerHTML = `
+            <div class="jenis-bulk-actions">
+                <button type="button" onclick="setAllJenis(true)">Pilih Semua</button>
+                <button type="button" onclick="setAllJenis(false)">Kosongkan</button>
+            </div>
+            ${checkboxes}
+        `;
+    }
+
+    function setAllJenis(checked) {
+        document.querySelectorAll('.jenisCheck').forEach(cb => cb.checked = checked);
+        applyCanggih();
     }
 
     function toggleJenisDropdown() {
@@ -1221,6 +1444,209 @@ async function executeDelete() {
         btnConfirm.innerText = originalText;
         btnConfirm.disabled = false;
     }
+}
+
+// ============ CUSTOM DATE & TIME PICKER (generik, dipakai fDateMin/Max & fTimeMin/Max) ============
+const BULAN_PICKER = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const DOW_PICKER = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+const pickerData = {};
+
+function ensurePickerData(key, type){
+    if (pickerData[key]) return;
+    const now = new Date();
+    pickerData[key] = type === 'date'
+        ? { confirmedDate: null, tempDate: null, viewMonth: now.getMonth(), viewYear: now.getFullYear() }
+        : { confirmedHour: null, confirmedMinute: null, tempHour: now.getHours(), tempMinute: now.getMinutes(), mode: 'hour' };
+}
+
+function togglePicker(el, ev){
+    ev.stopPropagation();
+    const field = el.closest('.picker-field');
+    const panel = field.querySelector('.picker-panel');
+    const willOpen = !panel.classList.contains('open');
+    document.querySelectorAll('.picker-panel').forEach(p => p.classList.remove('open'));
+    if (!willOpen) return;
+    panel.classList.add('open');
+
+    const key = field.dataset.field, type = field.dataset.type;
+    ensurePickerData(key, type);
+    const s = pickerData[key];
+
+    if (type === 'date'){
+        s.tempDate = s.confirmedDate;
+        if (s.confirmedDate){ s.viewMonth = s.confirmedDate.getMonth(); s.viewYear = s.confirmedDate.getFullYear(); }
+        renderCalendarFor(field);
+    } else {
+        s.tempHour = s.confirmedHour ?? new Date().getHours();
+        s.tempMinute = s.confirmedMinute ?? new Date().getMinutes();
+        s.mode = 'hour';
+        renderClockFor(field);
+    }
+}
+document.addEventListener('click', () => document.querySelectorAll('.picker-panel').forEach(p => p.classList.remove('open')));
+document.querySelectorAll('.picker-panel').forEach(p => p.addEventListener('click', e => e.stopPropagation()));
+function cancelPicker(el){ el.closest('.picker-panel').classList.remove('open'); }
+
+// ---------- kalender ----------
+function renderCalendarFor(field){
+    const s = pickerData[field.dataset.field];
+    field.querySelector('.cal-title').innerText = `${BULAN_PICKER[s.viewMonth]} ${s.viewYear}`;
+    const grid = field.querySelector('.cal-grid');
+    const firstDow = new Date(s.viewYear, s.viewMonth, 1).getDay();
+    const totalDays = new Date(s.viewYear, s.viewMonth + 1, 0).getDate();
+    const today = new Date();
+    let html = DOW_PICKER.map(d => `<div class="cal-dow">${d}</div>`).join('');
+    for (let i = 0; i < firstDow; i++) html += `<div class="cal-day empty"></div>`;
+    for (let d = 1; d <= totalDays; d++){
+        const isToday = d === today.getDate() && s.viewMonth === today.getMonth() && s.viewYear === today.getFullYear();
+        const isSelected = s.tempDate && d === s.tempDate.getDate() && s.viewMonth === s.tempDate.getMonth() && s.viewYear === s.tempDate.getFullYear();
+        html += `<div class="cal-day ${isToday?'today':''} ${isSelected?'selected':''}" onclick="pickDay(this, ${d})">${d}</div>`;
+    }
+    grid.innerHTML = html;
+}
+function changeMonth(el, dir){
+    const field = el.closest('.picker-field');
+    const s = pickerData[field.dataset.field];
+    const grid = field.querySelector('.cal-grid');
+    grid.style.opacity = '0';
+    setTimeout(() => {
+        s.viewMonth += dir;
+        if (s.viewMonth > 11){ s.viewMonth = 0; s.viewYear++; }
+        if (s.viewMonth < 0){ s.viewMonth = 11; s.viewYear--; }
+        renderCalendarFor(field);
+        requestAnimationFrame(() => { grid.style.opacity = '1'; });
+    }, 120);
+}
+function pickDay(el, d){
+    const field = el.closest('.picker-field');
+    const s = pickerData[field.dataset.field];
+    s.tempDate = new Date(s.viewYear, s.viewMonth, d);
+    renderCalendarFor(field);
+}
+function confirmDatePicker(el){
+    const field = el.closest('.picker-field');
+    const s = pickerData[field.dataset.field];
+    s.confirmedDate = s.tempDate;
+    if (s.confirmedDate){
+        const dd = String(s.confirmedDate.getDate()).padStart(2,'0');
+        const mm = String(s.confirmedDate.getMonth() + 1).padStart(2,'0');
+        field.querySelector('.picker-label').innerText = `${dd}/${mm}/${s.confirmedDate.getFullYear()}`;
+    }
+    field.querySelector('.picker-panel').classList.remove('open');
+    if (field.dataset.onconfirm) window[field.dataset.onconfirm]?.();
+}
+
+// ---------- jam (dial 24 jam, dual ring) ----------
+function setTimeMode(el, mode){
+    const field = el.closest('.picker-field');
+    pickerData[field.dataset.field].mode = mode;
+    renderClockFor(field);
+}
+function renderClockFor(field){
+    const s = pickerData[field.dataset.field];
+    field.querySelector('.hour-num').innerText = String(s.tempHour).padStart(2,'0');
+    field.querySelector('.min-num').innerText = String(s.tempMinute).padStart(2,'0');
+    field.querySelector('.hour-num').classList.toggle('active', s.mode === 'hour');
+    field.querySelector('.min-num').classList.toggle('active', s.mode === 'minute');
+    const face = field.querySelector('.clock-face');
+    face.querySelectorAll('.clock-num').forEach(el => el.remove());
+    const cx = 95, cy = 95, R_OUTER = 68, R_INNER = 42;
+    if (s.mode === 'hour'){
+        for (let i = 0; i < 12; i++){
+            const rad = (i * 30 - 90) * Math.PI / 180;
+            const outerVal = i === 0 ? 12 : i, innerVal = i === 0 ? 0 : i + 12;
+            addClockNum(face, cx + R_OUTER*Math.cos(rad), cy + R_OUTER*Math.sin(rad), outerVal, 'outer', outerVal === s.tempHour);
+            addClockNum(face, cx + R_INNER*Math.cos(rad), cy + R_INNER*Math.sin(rad), String(innerVal).padStart(2,'0'), 'inner', innerVal === s.tempHour);
+        }
+    } else {
+        for (let i = 0; i < 12; i++){
+            const rad = (i * 30 - 90) * Math.PI / 180;
+            const val = i * 5;
+            addClockNum(face, cx + R_OUTER*Math.cos(rad), cy + R_OUTER*Math.sin(rad), String(val).padStart(2,'0'), 'outer', val === s.tempMinute);
+        }
+    }
+    updateHandFor(field);
+}
+function addClockNum(face, x, y, label, ringClass, isSelected){
+    const num = document.createElement('div');
+    num.className = `clock-num ${ringClass}` + (isSelected ? ' selected' : '');
+    num.style.left = x + 'px'; num.style.top = y + 'px';
+    num.innerText = label;
+    num.onclick = (e) => { e.stopPropagation(); selectClockValue(face, typeof label === 'number' ? label : parseInt(label, 10)); };
+    face.appendChild(num);
+}
+function updateHandFor(field){
+    const s = pickerData[field.dataset.field];
+    const hand = field.querySelector('.clock-hand');
+    let angleDeg, len;
+    if (s.mode === 'hour'){
+        const isInner = s.tempHour === 0 || s.tempHour >= 13;
+        angleDeg = (s.tempHour % 12) * 30;
+        len = isInner ? 42 : 68;
+    } else { angleDeg = s.tempMinute * 6; len = 68; }
+    hand.style.height = len + 'px';
+    hand.style.transform = `rotate(${angleDeg}deg)`;
+}
+function selectClockValue(face, value){
+    const field = face.closest('.picker-field');
+    const s = pickerData[field.dataset.field];
+    if (s.mode === 'hour'){
+        s.tempHour = value;
+        renderClockFor(field);
+        setTimeout(() => setTimeMode(field.querySelector('.hour-num'), 'minute'), 180);
+    } else { s.tempMinute = value; renderClockFor(field); }
+}
+function clockClick(face, e){
+    e.stopPropagation();
+    const field = face.closest('.picker-field');
+    const s = pickerData[field.dataset.field];
+    const rect = face.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width/2, y = e.clientY - rect.top - rect.height/2;
+    const dist = Math.sqrt(x*x + y*y);
+    let angle = (Math.atan2(y, x) * 180/Math.PI + 90 + 360) % 360;
+    if (s.mode === 'hour'){
+        let idx = Math.round(angle/30) % 12;
+        const value = dist >= 55 ? (idx === 0 ? 12 : idx) : (idx === 0 ? 0 : idx + 12);
+        selectClockValue(face, value);
+    } else {
+        s.tempMinute = Math.round(angle/6) % 60;
+        renderClockFor(field);
+    }
+}
+function confirmTimePicker(el){
+    const field = el.closest('.picker-field');
+    const s = pickerData[field.dataset.field];
+    s.confirmedHour = s.tempHour; s.confirmedMinute = s.tempMinute;
+    field.querySelector('.picker-label').innerText = `${String(s.confirmedHour).padStart(2,'0')}:${String(s.confirmedMinute).padStart(2,'0')}`;
+    field.querySelector('.picker-panel').classList.remove('open');
+    if (field.dataset.onconfirm) window[field.dataset.onconfirm]?.();
+}
+
+// ---------- value final buat applyCanggih() ----------
+function getPickerDateValue(key){
+    const d = pickerData[key]?.confirmedDate;
+    if (!d) return '';
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function getPickerTimeValue(key){
+    const s = pickerData[key];
+    if (!s || s.confirmedHour == null) return '';
+    return `${String(s.confirmedHour).padStart(2,'0')}:${String(s.confirmedMinute).padStart(2,'0')}`;
+}
+
+function clearPicker(el){
+    const field = el.closest('.picker-field');
+    const key = field.dataset.field;
+    const type = field.dataset.type;
+    const placeholder = field.dataset.placeholder || (type === 'date' ? 'dd/mm/yyyy' : '--:--');
+
+    if (pickerData[key]){
+        if (type === 'date'){ pickerData[key].confirmedDate = null; pickerData[key].tempDate = null; }
+        else { pickerData[key].confirmedHour = null; pickerData[key].confirmedMinute = null; }
+    }
+    field.querySelector('.picker-label').innerText = placeholder;
+    field.querySelector('.picker-panel').classList.remove('open');
+    if (field.dataset.onconfirm) window[field.dataset.onconfirm]?.();
 }
 
 </script>
