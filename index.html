@@ -22,6 +22,8 @@
             --in-color: #2ecc71;
             --out-color: #e74c3c;
             --btn-gray: #333333;
+            --border-line: #444;
+            --bg-items: #333;
         }
 
         html, body { 
@@ -73,7 +75,7 @@
 
         .category-nav {
             display: flex; background: var(--neru-black); position: sticky; top: 0; z-index: 100;
-            border-bottom: 2px solid #333;
+            border-bottom: 2px solid var(--bg-items);
         }
         .nav-item {
             flex: 1; padding: 18px 10px; text-align: center; font-weight: 900; cursor: pointer;
@@ -129,7 +131,7 @@
         label { display: block; margin-bottom: 8px; color: var(--primary-yellow); font-size: 0.8em; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
         
         input, textarea {
-            width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #333;
+            width: 100%; padding: 14px; border-radius: 12px; border: 2px solid var(--bg-items);
             background: var(--baground-dark); color: white; box-sizing: border-box; font-size: 16px;
             font-family: 'Inter', sans-serif; font-weight: 700;
         }
@@ -170,9 +172,9 @@
 
         .history-item {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 15px; cursor: pointer; border-bottom: 1px solid #333; color: #ccc;
+            padding: 12px 15px; cursor: pointer; border-bottom: 1px solid var(--bg-items); color: #ccc;
         }
-        .history-item:hover { background: #333; color: var(--primary-yellow); }
+        .history-item:hover { background: var(--bg-items); color: var(--primary-yellow); }
         .delete-history { color: #e74c3c; padding: 5px 10px; font-weight: 900; font-size: 18px; }
 
         .empty-state { text-align: center; padding: 50px 20px; color: #555; }
@@ -261,7 +263,7 @@
             letter-spacing: 1px;
             
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 1px solid #333;
+            border: 1px solid var(--bg-items);
             
             opacity: 0;
             transition: all 0.3s ease;
@@ -285,7 +287,7 @@
             border-radius: 14px;
             padding: 12px;
             text-align: center;
-            border: 1px solid #333;
+            border: 1px solid var(--bg-items);
         }
 
         .summary-title {
@@ -328,7 +330,7 @@
             opacity: 0; transition: 0.3s ease;
         }
         .custom-alert-box {
-            background: var(--neru-black); border: 2px solid #333;
+            background: var(--neru-black); border: 2px solid var(--bg-items);
             border-radius: 15px; padding: 25px; width: 80%; max-width: 320px;
             text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
             transform: scale(0.8); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -342,7 +344,7 @@
             position: absolute;
             top: 100%; left: 0;
             background: var(--baground-dark);
-            border: 1px solid #444;
+            border: 1px solid var(--border-line);
             border-radius: 8px;
             padding: 8px;
             z-index: 200;
@@ -433,7 +435,7 @@
             <div class="input-group" style="position: relative;">
                 <label>Jenis Laporan</label>
                 <input type="text" id="jenis" placeholder="Ketik jenis..." autocomplete="off" onfocus="showHistory()" oninput="filterHistory()">
-                <div id="custom-history-dropdown" style="display: none; position: absolute; width: 100%; background: var(--baground-dark); border: 1px solid #444; border-radius: 10px; z-index: 100; max-height: 200px; overflow-y: auto; margin-top: 5px; -webkit-tap-highlight-color: transparent;"></div>
+                <div id="custom-history-dropdown" style="display: none; position: absolute; width: 100%; background: var(--baground-dark); border: 1px solid var(--border-line); border-radius: 10px; z-index: 100; max-height: 200px; overflow-y: auto; margin-top: 5px; -webkit-tap-highlight-color: transparent;"></div>
             </div>
 
             <div class="input-group">
@@ -513,13 +515,13 @@
             <table class="tabel">
                 <thead>
                     <tr style="background: var(--btn-gray); color: var(--primary-yellow);">
-                        <th style="padding: 8px; border: 1px solid #444;"><button onclick="toggleFilter('date')" style="background:none; border:none; color:inherit; font-weight:900; font-size:1em;">TGL</button></th>
-                        <th style="padding: 8px; border: 1px solid #444;"><button onclick="toggleFilter('time')" style="background:none; border:none; color:inherit; font-weight:900; font-size:1em;">JAM</button></th>
-                        <th style="padding: 8px; border: 1px solid #444;"><button onclick="toggleFilter('jenis')" style="background:none; border:none; color:inherit; font-weight:900; font-size:1em;">JENIS</button></th>
-                        <th style="padding: 8px; border: 1px solid #444;"><button onclick="toggleFilter('keterangan')" style="background:none; border:none; color:inherit; font-weight:900; font-size:1em;">KET</th>
-                        <th style="padding: 8px; border: 1px solid #444;">MASUK</th>
-                        <th style="padding: 8px; border: 1px solid #444;">KELUAR</th>
-                        <th style="padding: 8px; border: 1px solid #444;"><button onclick="toggleFilter('saldo')" style="background:none; border:none; color:inherit; font-weight:900; font-size:1em;">SALDO</button></th>
+                        <th style="padding: 8px; border: 1px solid var(--border-line);"><button onclick="toggleFilter('date')" style="background:none; border:none; color:inherit; font-weight:900; font-size:1em;">TGL</button></th>
+                        <th style="padding: 8px; border: 1px solid var(--border-line);"><button onclick="toggleFilter('time')" style="background:none; border:none; color:inherit; font-weight:900; font-size:1em;">JAM</button></th>
+                        <th style="padding: 8px; border: 1px solid var(--border-line);"><button onclick="toggleFilter('jenis')" style="background:none; border:none; color:inherit; font-weight:900; font-size:1em;">JENIS</button></th>
+                        <th style="padding: 8px; border: 1px solid var(--border-line);"><button onclick="toggleFilter('keterangan')" style="background:none; border:none; color:inherit; font-weight:900; font-size:1em;">KET</th>
+                        <th style="padding: 8px; border: 1px solid var(--border-line);">MASUK</th>
+                        <th style="padding: 8px; border: 1px solid var(--border-line);">KELUAR</th>
+                        <th style="padding: 8px; border: 1px solid var(--border-line);"><button onclick="toggleFilter('saldo')" style="background:none; border:none; color:inherit; font-weight:900; font-size:1em;">SALDO</button></th>
                     </tr>
                     <tr id="filterRow" style="display: none; background: var(--baground-dark);">
                         <th style="padding: 5px;">
@@ -532,7 +534,7 @@
                         </th>
                         <th style="padding: 5px; position: relative;">
                             <button type="button" onclick="toggleJenisDropdown()" 
-                                    style="width:100%; background:#333; color:white; font-size:10px; border:1px solid #555; padding:6px; border-radius:6px;">
+                                    style="width:100%; background:var(--bg-items); color:white; font-size:10px; border:1px solid #555; padding:6px; border-radius:6px;">
                                 Jenis ▾
                             </button>
                             <div id="jenisDropdownPanel" class="jenis-dropdown-panel"></div>
@@ -846,7 +848,7 @@
                 plugins: { legend: { display: false } },
                 scales: {
                     x: { grid: { display: false }, ticks: { color: '#666', font: { size: 10 } } },
-                    y: { grid: { color: '#333' }, ticks: { color: '#666', font: { size: 10 } } }
+                    y: { grid: { color: 'var(--bg-items)' }, ticks: { color: '#666', font: { size: 10 } } }
                 }
             }
         });
@@ -1052,10 +1054,10 @@
                 const rowIdx = r[7]; // Indeks baris asli dari spreadsheet
                 const isSelected = selectedRows.includes(rowIdx);
                 const trCursor = isSelectMode ? "cursor: pointer;" : "";
-                const trBg = isSelected ? "background: var(--out-color);" : "";
+                const trBg = isSelected ? "background: var(--out-color); -webkit-tap-highlight-color: transparent;" : "";
 
                 return `
-                <tr style="border-bottom: 1px solid #333; transition: 0.2s; ${trCursor} ${trBg}" 
+                <tr style="border-bottom: 1px solid var(--bg-items); transition: 0.2s; ${trCursor} ${trBg}" 
                     onclick="${isSelectMode ? `toggleRowSelection(${rowIdx})` : ''}">
                     <td style="padding: 8px;">${tglTampil}</td>
                     <td style="padding: 8px;">${r[1]}</td>
