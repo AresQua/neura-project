@@ -1223,18 +1223,61 @@
 
     async function loadTableData() {
         const tbody = document.getElementById('tableBody');
+        
+        // 1. Loading state untuk Tabel
         tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px;">Memuat Data...</td></tr>';
+        
+        // 2. Loading state untuk Summary Saldo
+        document.getElementById('sumMasuk').innerText = 'Memuat...';
+        document.getElementById('sumKeluar').innerText = 'Memuat...';
+        document.getElementById('sumSelisih').innerText = 'Memuat...';
+        document.getElementById('selisihCard').classList.remove('positive', 'negative', 'zero');
+        
+        // 3. Loading state untuk Chart
+        if (myChart) myChart.destroy(); // Hilangkan grafik lama saat loading
+        const chartContainer = document.getElementById('financeChart').parentElement;
+        let chartOverlay = document.getElementById('chartLoadingOverlay');
+        
+        // Buat elemen teks loading otomatis di tengah chart jika belum ada
+        if (!chartOverlay) {
+            chartOverlay = document.createElement('div');
+            chartOverlay.id = 'chartLoadingOverlay';
+            chartOverlay.style.cssText = 'position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:#888; font-weight:700; font-size:12px; text-align:center; pointer-events:none;';
+            chartContainer.appendChild(chartOverlay);
+        }
+        chartOverlay.innerText = 'Memuat Grafik...';
+        chartOverlay.style.color = '#888';
+        chartOverlay.style.display = 'block';
+
         try {
             const res = await fetch(WEB_APP_URL);
             const json = await res.json();
             fullData = json.allData;
+            
             renderCanggih([...fullData].reverse());
             updateSummary(fullData);
+            
+            // Sembunyikan teks loading grafik karena datanya sudah siap dirender
+            if (chartOverlay) chartOverlay.style.display = 'none';
+            
             setTimeout(() => {
                 updateChartPeriod('1W'); 
             }, 100);
+            
             populateJenisFilter(fullData);
-        } catch (e) { tbody.innerHTML = '<tr><td colspan="7" style="color:red; text-align:center;">Gagal koneksi.</td></tr>'; }
+            
+        } catch (e) { 
+            // Tampilan jika gagal koneksi
+            tbody.innerHTML = '<tr><td colspan="7" style="color:var(--out-color); text-align:center;">Gagal koneksi.</td></tr>'; 
+            document.getElementById('sumMasuk').innerText = 'Error';
+            document.getElementById('sumKeluar').innerText = 'Error';
+            document.getElementById('sumSelisih').innerText = 'Error';
+            
+            if (chartOverlay) {
+                chartOverlay.innerText = 'Gagal memuat grafik.';
+                chartOverlay.style.color = 'var(--out-color)';
+            }
+        }
     }
 
     function toggleFilter() {
